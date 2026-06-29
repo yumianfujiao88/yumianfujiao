@@ -1,16 +1,94 @@
+
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>羽見福餃</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>羽見福餃｜線上訂購</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0;padding:20px}
+.card{max-width:760px;margin:auto;background:#fff;padding:20px;border-radius:12px}
+h1{color:#2e7d32}
+.item{border-bottom:1px solid #ddd;padding:10px 0}
+.hidden{display:none}
+label{display:block;margin:6px 0}
+.total{font-size:22px;font-weight:bold;color:#d32f2f;margin-top:20px}
+</style>
 </head>
-
 <body>
+<div class="card">
+<h1>🥟 羽見福餃｜線上訂購</h1>
 
-<h1>🥟 羽見福餃</h1>
+<div id="items"></div>
 
-<p>歡迎使用線上訂購系統</p>
+<h2>顧客資料</h2>
+<label>姓名：<input type="text"></label>
+<label>電話：<input type="tel"></label>
 
+<h2>取貨方式</h2>
+<label><input type="radio" name="ship" value="pickup" onchange="mode()"> 自取</label>
+<label><input type="radio" name="ship" value="family" onchange="mode()"> 全家店到店</label>
+
+<div id="pickup" class="hidden">
+<h3>付款方式</h3>
+<label><input type="radio" name="pay"> 現金付款</label>
+<label><input type="radio" name="pay" onclick="bank.classList.remove('hidden')"> 匯款</label>
+</div>
+
+<div id="family" class="hidden">
+<h3>店到店資料</h3>
+<label>收件人姓名：<input></label>
+<label>收件人電話：<input></label>
+<label>全家店號：<input></label>
+<p><b>付款方式：匯款</b></p>
+</div>
+
+<div id="bank" class="hidden">
+<p><b>郵局(700)</b><br>帳號：01010032691892</p>
+<label>匯款後五碼：<input></label>
+</div>
+
+<h2>備註</h2>
+<textarea style="width:100%;height:80px"></textarea>
+
+<div class="total">總金額：<span id="total">0</span> 元</div>
+
+<button style="width:100%;padding:15px;font-size:18px;background:#2e7d32;color:white;border:0;border-radius:8px">送出訂單</button>
+</div>
+
+<script>
+const menu=[
+["高麗菜",7.5],["韭菜",7.5],["玉米",7.5],["蔥肉",7.5],
+["泡菜",10],["剝皮辣椒豬肉",10],["鮮蝦",15],["泡菜鮮蝦",15]
+];
+const qty=[20,40,60,80,100];
+const items=document.getElementById("items");
+menu.forEach((m,i)=>{
+ let html=`<div class=item><label><input type=checkbox onchange="toggle(${i})"> ${m[0]} (${m[1]}元/顆)</label>
+ <div id='o${i}' class='hidden'>`;
+ qty.forEach(q=>html+=`<label><input type=radio name=q${i} value=${q} data-price=${m[1]} onchange="calc()"> ${q}顆</label>`);
+ html+="</div></div>";
+ items.insertAdjacentHTML("beforeend",html);
+});
+function toggle(i){
+ let d=document.getElementById("o"+i);
+ let c=d.previousElementSibling.firstChild.checked;
+ d.className=c?"":"hidden";
+ if(!c){d.querySelectorAll("input").forEach(x=>x.checked=false);calc();}
+}
+function calc(){
+ let t=0;
+ document.querySelectorAll("input[type=radio]:checked").forEach(r=>{
+   if(r.dataset.price)t+=parseFloat(r.dataset.price)*parseInt(r.value);
+ });
+ document.getElementById("total").textContent=t;
+}
+function mode(){
+ pickup.className='hidden';family.className='hidden';bank.className='hidden';
+ const v=document.querySelector("input[name=ship]:checked").value;
+ if(v=="pickup") pickup.className='';
+ else {family.className='';bank.className='';}
+}
+</script>
 </body>
 </html>
