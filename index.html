@@ -99,20 +99,30 @@ phone:document.querySelector('input[type=tel]').value,
 total:document.getElementById("total").innerText
 };
 
+const API="https://script.google.com/macros/s/AKfycbzGLSTGGsgb559yyKxGQzrtuBIh_CCFUMF2OIFqSe2x_PGIof9PBZUIihgZRt-eI3zI2A/exec";
+
+function submitOrder(){
+
+const data={
+name:document.querySelector('input[type=text]').value,
+phone:document.querySelector('input[type=tel]').value,
+total:document.getElementById("total").innerText
+};
+
 fetch(API,{
   method:"POST",
-  headers:{
-    "Content-Type":"application/json"
-  },
   body:JSON.stringify(data)
 })
 .then(r=>r.text())
-.then(()=>{
-alert("訂單送出成功！");
+.then(t=>{
+  alert(t);
 })
-.catch(()=>{
-alert("送出失敗");
+.catch(e=>{
+  alert(e);
 });
+
+}   
+
 
 }</script>
 </body>
