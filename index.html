@@ -1,129 +1,299 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>羽見福餃｜線上訂購</title>
+
 <style>
-body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0;padding:20px}
-.card{max-width:760px;margin:auto;background:#fff;padding:20px;border-radius:12px}
-h1{color:#2e7d32}
-.item{border-bottom:1px solid #ddd;padding:10px 0}
-.hidden{display:none}
-label{display:block;margin:6px 0}
-.total{font-size:22px;font-weight:bold;color:#d32f2f;margin-top:20px}
+*{
+    box-sizing:border-box;
+    font-family:"Microsoft JhengHei",sans-serif;
+}
+
+body{
+    margin:0;
+    background:#f5f5f5;
+}
+
+.container{
+    max-width:700px;
+    margin:20px auto;
+    background:#fff;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 0 15px rgba(0,0,0,.15);
+}
+
+h1{
+    text-align:center;
+    color:#2e7d32;
+}
+
+.card{
+    border:1px solid #ddd;
+    border-radius:10px;
+    padding:12px;
+    margin-bottom:12px;
+}
+
+.card h3{
+    margin:0 0 10px;
+}
+
+input,select,textarea{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    margin-bottom:10px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    background:#2e7d32;
+    color:white;
+    font-size:20px;
+    border:none;
+    border-radius:10px;
+}
+
+.total{
+    font-size:28px;
+    color:red;
+    text-align:center;
+    margin:20px 0;
+    font-weight:bold;
+}
+
+.note{
+    background:#fff8e1;
+    padding:10px;
+    border-radius:10px;
+    margin-bottom:15px;
+}
 </style>
 </head>
-<body>
-<div class="card">
-<h1>🥟 羽見福餃｜線上訂購</h1>
 
-<div id="items"></div>
+<body>
+
+<div class="container">
+
+<h1>🥟 羽見福餃 線上訂購</h1>
+
+<div class="note">
+營業時間：<br>
+週一～週五 10:30～22:30<br>
+週六、週日公休
+</div>
+
+<div id="products"><div class="card">
+<h3>高麗菜水餃（7.5元/顆）</h3>
+<select id="cabbage" onchange="calc()">
+<option value="0">請選擇</option>
+<option value="20">20 顆</option>
+<option value="40">40 顆</option>
+<option value="60">60 顆</option>
+<option value="80">80 顆</option>
+<option value="100">100 顆</option>
+</select>
+</div>
+
+<div class="card">
+<h3>韭菜水餃（7.5元/顆）</h3>
+<select id="chive" onchange="calc()">
+<option value="0">請選擇</option>
+<option value="20">20 顆</option>
+<option value="40">40 顆</option>
+<option value="60">60 顆</option>
+<option value="80">80 顆</option>
+<option value="100">100 顆</option>
+</select>
+</div>
+
+<div class="card">
+<h3>玉米水餃（7.5元/顆）</h3>
+<select id="corn" onchange="calc()">
+<option value="0">請選擇</option>
+<option value="20">20 顆</option>
+<option value="40">40 顆</option>
+<option value="60">60 顆</option>
+<option value="80">80 顆</option>
+<option value="100">100 顆</option>
+</select>
+</div>
+
+<div class="card">
+<h3>蔥肉水餃（7.5元/顆）</h3>
+<select id="scallion" onchange="calc()">
+<option value="0">請選擇</option>
+<option value="20">20 顆</option>
+<option value="40">40 顆</option>
+<option value="60">60 顆</option>
+<option value="80">80 顆</option>
+<option value="100">100 顆</option>
+</select>
+</div>
+
+<div class="card">
+<h3>泡菜水餃（10元/顆）</h3>
+<select id="kimchi" onchange="calc()">
+<option value="0">請選擇</option>
+<option value="20">20 顆</option>
+<option value="40">40 顆</option>
+<option value="60">60 顆</option>
+<option value="80">80 顆</option>
+<option value="100">100 顆</option>
+</select>
+</div>
+
+<div class="card">
+<h3>剝皮辣椒豬肉水餃（10元/顆）</h3>
+<select id="pepper" onchange="calc()">
+<option value="0">請選擇</option>
+<option value="20">20 顆</option>
+<option value="40">40 顆</option>
+<option value="60">60 顆</option>
+<option value="80">80 顆</option>
+<option value="100">100 顆</option>
+</select>
+</div>
+
+<div class="card">
+<h3>鮮蝦水餃（15元/顆）</h3>
+<select id="shrimp" onchange="calc()">
+<option value="0">請選擇</option>
+<option value="20">20 顆</option>
+<option value="40">40 顆</option>
+<option value="60">60 顆</option>
+<option value="80">80 顆</option>
+<option value="100">100 顆</option>
+</select>
+</div>
+
+<div class="card">
+<h3>泡菜鮮蝦水餃（15元/顆）</h3>
+<select id="kimchiShrimp" onchange="calc()">
+<option value="0">請選擇</option>
+<option value="20">20 顆</option>
+<option value="40">40 顆</option>
+<option value="60">60 顆</option>
+<option value="80">80 顆</option>
+<option value="100">100 顆</option>
+</select>
+</div></div>
 
 <h2>顧客資料</h2>
-<label>姓名：<input type="text"></label>
-<label>電話：<input type="tel"></label>
 
-<h2>取貨方式</h2>
-<label><input type="radio" name="ship" value="pickup" onchange="mode()"> 自取</label>
-<label><input type="radio" name="ship" value="family" onchange="mode()"> 全家店到店</label>
+<label>姓名</label>
+<input type="text" id="name" placeholder="請輸入姓名">
 
-<div id="pickup" class="hidden">
-<h3>付款方式</h3>
-<label><input type="radio" name="pay"> 現金付款</label>
-<label><input type="radio" name="pay" onclick="bank.classList.remove('hidden')"> 匯款</label>
+<label>電話</label>
+<input type="tel" id="phone" placeholder="請輸入電話">
+
+<label>地址（自取可不填）</label>
+<textarea id="address" placeholder="店到店或宅配請填寫完整地址"></textarea>
+
+<label>備註</label>
+<textarea id="note" placeholder="例如：不要香菜、下午取貨..."></textarea>
+
+<div class="total">
+總金額：
+<span id="total">0</span> 元
 </div>
 
-<div id="family" class="hidden">
-<h3>店到店資料</h3>
-<label>收件人姓名：<input></label>
-<label>收件人電話：<input></label>
-<label>全家店號：<input></label>
-<p><b>付款方式：匯款</b></p>
-</div>
+<button onclick="submitOrder()">
+送出訂單
+</button><script>
 
-<div id="bank" class="hidden">
-<p><b>郵局(700)</b><br>帳號：01010032691892</p>
-<label>匯款後五碼：<input></label>
-</div>
+const API="https://script.google.com/macros/s/AKfycbxUwUuaONyqF0PDyzmVRQN_ohD00-GC-IYAOKjeVFVs4HjzxPo2T8vamerw4pYClmGO2A/exec";
 
-<h2>備註</h2>
-<textarea style="width:100%;height:80px"></textarea>
-
-<div class="total">總金額：<span id="total">0</span> 元</div>
-
-<button onclick="submitOrder()" style="width:100%;padding:15px;font-size:18px;background:#2e7d32;color:white;border:0;border-radius:8px">送出訂單</button>
-</div>
-
-<script>
-const menu=[
-["高麗菜",7.5],["韭菜",7.5],["玉米",7.5],["蔥肉",7.5],
-["泡菜",10],["剝皮辣椒豬肉",10],["鮮蝦",15],["泡菜鮮蝦",15]
-];
-const qty=[20,40,60,80,100];
-const items=document.getElementById("items");
-menu.forEach((m,i)=>{
- let html=`<div class=item><label><input type=checkbox onchange="toggle(${i})"> ${m[0]} (${m[1]}元/顆)</label>
- <div id='o${i}' class='hidden'>`;
- qty.forEach(q=>html+=`<label><input type=radio name=q${i} value=${q} data-price=${m[1]} onchange="calc()"> ${q}顆</label>`);
- html+="</div></div>";
- items.insertAdjacentHTML("beforeend",html);
-});
-function toggle(i){
- let d=document.getElementById("o"+i);
- let c=d.previousElementSibling.firstChild.checked;
- d.className=c?"":"hidden";
- if(!c){d.querySelectorAll("input").forEach(x=>x.checked=false);calc();}
+function v(id){
+  return Number(document.getElementById(id).value);
 }
+
 function calc(){
- let t=0;
- document.querySelectorAll("input[type=radio]:checked").forEach(r=>{
-   if(r.dataset.price)t+=parseFloat(r.dataset.price)*parseInt(r.value);
- });
- document.getElementById("total").textContent=t;
+
+  let total=0;
+
+  total+=v("cabbage")*7.5;
+  total+=v("chive")*7.5;
+  total+=v("corn")*7.5;
+  total+=v("scallion")*7.5;
+
+  total+=v("kimchi")*10;
+  total+=v("pepper")*10;
+
+  total+=v("shrimp")*15;
+  total+=v("kimchiShrimp")*15;
+
+  document.getElementById("total").innerText=total;
+
+}function submitOrder(){
+
+  const data={
+    name:document.getElementById("name").value,
+    phone:document.getElementById("phone").value,
+    address:document.getElementById("address").value,
+
+    cabbage:v("cabbage"),
+    chive:v("chive"),
+    corn:v("corn"),
+    scallion:v("scallion"),
+    kimchi:v("kimchi"),
+    pepper:v("pepper"),
+    shrimp:v("shrimp"),
+    kimchiShrimp:v("kimchiShrimp"),
+
+    total:Number(document.getElementById("total").innerText),
+    note:document.getElementById("note").value
+  };
+
+  if(data.name==""){
+    alert("請輸入姓名");
+    return;
+  }
+
+  if(data.phone==""){
+    alert("請輸入電話");
+    return;
+  }
+
+  fetch(API,{
+    method:"POST",
+    headers:{
+      "Content-Type":"text/plain;charset=utf-8"
+    },
+    body:JSON.stringify(data)
+  })
+  .then(r=>r.json())
+  .then(res=>{
+
+      if(res.success){
+
+          alert("訂單送出成功！");
+
+          location.reload();
+
+      }else{
+
+          alert("送出失敗：" + res.error);
+
+      }
+
+  })
+  .catch(err=>{
+
+      alert("連線失敗\n"+err);
+
+  });
+
 }
-function mode(){
- pickup.className='hidden';family.className='hidden';bank.className='hidden';
- const v=document.querySelector("input[name=ship]:checked").value;
- if(v=="pickup") pickup.className='';
- else {family.className='';bank.className='';}
-}
-const API="https://script.google.com/macros/s/AKfycbzGLSTGGsgb559yyKxGQzrtuBIh_CCFUMF2OIFqSe2x_PGIof9PBZUIihgZRt-eI3zI2A/exec";
 
-function submitOrder(){
+</script>
 
-const data={
-name:document.querySelector('input[type=text]').value,
-phone:document.querySelector('input[type=tel]').value,
-total:document.getElementById("total").innerText
-};
-
-const API="https://script.google.com/macros/s/AKfycbzGLSTGGsgb559yyKxGQzrtuBIh_CCFUMF2OIFqSe2x_PGIof9PBZUIihgZRt-eI3zI2A/exec";
-
-function submitOrder(){
-
-const data={
-name:document.querySelector('input[type=text]').value,
-phone:document.querySelector('input[type=tel]').value,
-total:document.getElementById("total").innerText
-};
-
-fetch(API,{
-  method:"POST",
-  body:JSON.stringify(data)
-})
-.then(r=>r.text())
-.then(t=>{
-  alert(t);
-})
-.catch(e=>{
-  alert(e);
-});
-
-}   
-
-
-}</script>
 </body>
 </html>
