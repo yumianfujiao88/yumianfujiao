@@ -41,7 +41,9 @@ h1{
     margin:0 0 10px;
 }
 
-input,select,textarea{
+input:not([type="radio"]),
+select,
+textarea{
     width:100%;
     padding:10px;
     margin-top:5px;
@@ -52,10 +54,11 @@ input,select,textarea{
 }
 
 input[type="radio"]{
-    width:auto;
-    margin:0;
-    padding:0;
-    border:none;
+    width:22px;
+    height:22px;
+    margin-right:12px;
+    accent-color:#2e7d32;
+    vertical-align:middle;
 }
 
 button{
@@ -193,7 +196,8 @@ button{
 </select>
 </div></div>
 
-<h2>顧客資料</h2><h2>📦 運費說明</h2>
+<h2>顧客資料</h2>
+<h2>📦 運費說明</h2>
 
 <div class="note">
 📦 運費說明<br>
@@ -206,21 +210,26 @@ button{
 
 <h2>🚚 取貨方式</h2>
 
-<label style="display:flex;align-items:center;gap:12px;margin:15px 0;">
-  <input type="radio" name="ship" value="自取" checked>
-  <span>自取（免運費）</span>
+<div style="margin:15px 0;">
+<label style="display:flex;align-items:center;">
+<input type="radio" name="ship" value="自取" checked style="width:22px;height:22px;margin-right:12px;">
+<span>自取（免運費）</span>
 </label>
+</div>
 
-<label style="display:flex;align-items:center;gap:12px;margin:15px 0;">
-  <input type="radio" name="ship" value="全家店到店">
-  <span>全家店到店（運費100元）</span>
+<div style="margin:15px 0;">
+<label style="display:flex;align-items:center;">
+<input type="radio" name="ship" value="全家店到店" style="width:22px;height:22px;margin-right:12px;">
+<span>全家店到店（運費100元）</span>
 </label>
+</div>
 
-<label style="display:flex;align-items:center;gap:12px;margin:15px 0;">
-  <input type="radio" name="ship" value="宅配">
-  <span>宅配（運費300元）</span>
+<div style="margin:15px 0;">
+<label style="display:flex;align-items:center;">
+<input type="radio" name="ship" value="宅配" style="width:22px;height:22px;margin-right:12px;">
+<span>宅配（運費300元）</span>
 </label>
-<br><br>
+</div>
 
 <label>姓名</label>
 <input type="text" id="name" placeholder="請輸入姓名">
