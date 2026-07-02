@@ -196,41 +196,40 @@ button{
 </select>
 </div></div>
 
-<h2>顧客資料</h2>
 <h2>📦 運費說明</h2>
 
 <div class="note">
-📦 運費說明<br>
 自取：免運費<br>
 全家店到店：100 元<br>
 宅配：300 元<br><br>
-
-🎉 消費滿 3000 元免運費
+🎉 消費滿3000元免運費
 </div>
 
 <h2>🚚 取貨方式</h2>
 
 <div style="margin:15px 0;">
 <label style="display:flex;align-items:center;">
-<input type="radio" name="ship" value="自取" checked style="width:22px;height:22px;margin-right:12px;">
+<input type="radio" name="ship" value="自取" checked onchange="calc()" style="width:22px;height:22px;margin-right:12px;">
 <span>自取（免運費）</span>
 </label>
 </div>
 
 <div style="margin:15px 0;">
 <label style="display:flex;align-items:center;">
-<input type="radio" name="ship" value="全家店到店" style="width:22px;height:22px;margin-right:12px;">
+<input type="radio" name="ship" value="全家店到店" onchange="calc()" style="width:22px;height:22px;margin-right:12px;">
 <span>全家店到店（運費100元）</span>
 </label>
 </div>
 
 <div style="margin:15px 0;">
 <label style="display:flex;align-items:center;">
-<input type="radio" name="ship" value="宅配" style="width:22px;height:22px;margin-right:12px;">
+<input type="radio" name="ship" value="宅配" onchange="calc()" style="width:22px;height:22px;margin-right:12px;">
 <span>宅配（運費300元）</span>
 </label>
 </div>
 
+<h2>👤 顧客資料</h2>
+    
 <label>姓名</label>
 <input type="text" id="name" placeholder="請輸入姓名">
 
@@ -259,27 +258,38 @@ function v(id){
 
 function calc(){
 
-  let total=0;
+  let total = 0;
 
-  total+=v("cabbage")*7.5;
-  total+=v("chive")*7.5;
-  total+=v("corn")*7.5;
-  total+=v("scallion")*7.5;
+  total += v("cabbage") * 7.5;
+  total += v("chive") * 7.5;
+  total += v("corn") * 7.5;
+  total += v("scallion") * 7.5;
 
-  total+=v("kimchi")*10;
-  total+=v("pepper")*10;
+  total += v("kimchi") * 10;
+  total += v("pepper") * 10;
 
-  total+=v("shrimp")*15;
-  total+=v("kimchiShrimp")*15;
+  total += v("shrimp") * 15;
+  total += v("kimchiShrimp") * 15;
 
-  document.getElementById("total").innerText=total;
+  const ship =
+    document.querySelector('input[name="ship"]:checked').value;
 
-}function submitOrder(){
+  let shipping = 0;
 
-  const data={
-    name:document.getElementById("name").value,
-    phone:document.getElementById("phone").value,
-    address:document.getElementById("address").value,
+  if (total < 3000) {
+    if (ship === "全家店到店") shipping = 100;
+    if (ship === "宅配") shipping = 300;
+  }
+
+  document.getElementById("total").innerText = total + shipping;
+}
+function submitOrder(){
+
+  const data = {
+  name: document.getElementById("name").value,
+  phone: document.getElementById("phone").value,
+  address: document.getElementById("address").value,
+  ship: document.querySelector('input[name="ship"]:checked').value,
 
     cabbage:v("cabbage"),
     chive:v("chive"),
