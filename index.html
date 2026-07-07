@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>羽見福餃V2 測試｜線上訂購</title>
+
+<title>羽見福餃｜線上訂購</title>
 
 <style>
+
 *{
     box-sizing:border-box;
     font-family:"Microsoft JhengHei",sans-serif;
@@ -30,62 +34,73 @@ h1{
     color:#2e7d32;
 }
 
+h2{
+    color:#2e7d32;
+    margin-top:25px;
+}
+
 .card{
     border:1px solid #ddd;
-    border-radius:10px;
-    padding:12px;
-    margin-bottom:12px;
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:15px;
 }
 
 .card h3{
     margin:0 0 10px;
 }
 
-input:not([type="radio"]),
 select,
+input:not([type=radio]),
 textarea{
     width:100%;
     padding:10px;
-    margin-top:5px;
-    margin-bottom:10px;
     border:1px solid #ccc;
     border-radius:8px;
+    margin-top:8px;
+    margin-bottom:10px;
     font-size:16px;
 }
 
-input[type="radio"]{
+input[type=radio]{
     width:22px;
     height:22px;
     margin-right:12px;
     accent-color:#2e7d32;
-    vertical-align:middle;
+}
+
+.note{
+    background:#FFF8E1;
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:20px;
+}
+
+.total{
+    font-size:30px;
+    color:red;
+    text-align:center;
+    font-weight:bold;
+    margin:25px 0;
 }
 
 button{
     width:100%;
-    padding:15px;
+    padding:16px;
     background:#2e7d32;
-    color:white;
-    font-size:20px;
+    color:#fff;
     border:none;
     border-radius:10px;
+    font-size:22px;
+    cursor:pointer;
 }
 
-.total{
-    font-size:28px;
-    color:red;
-    text-align:center;
-    margin:20px 0;
-    font-weight:bold;
+button:hover{
+    background:#256428;
 }
 
-.note{
-    background:#fff8e1;
-    padding:10px;
-    border-radius:10px;
-    margin-bottom:15px;
-}
 </style>
+
 </head>
 
 <body>
@@ -207,144 +222,207 @@ button{
 
 <h2>🚚 取貨方式</h2>
 
-<div style="margin:15px 0;">
-<label style="display:flex;align-items:center;">
-<input type="radio" name="ship" value="自取" checked onchange="calc()" style="width:22px;height:22px;margin-right:12px;">
+<label style="display:flex;align-items:center;margin:12px 0;">
+<input type="radio" name="ship" value="自取" checked onchange="calc()">
 <span>自取（免運費）</span>
 </label>
-</div>
 
-<div style="margin:15px 0;">
-<label style="display:flex;align-items:center;">
-<input type="radio" name="ship" value="全家店到店" onchange="calc()" style="width:22px;height:22px;margin-right:12px;">
+<label style="display:flex;align-items:center;margin:12px 0;">
+<input type="radio" name="ship" value="全家店到店" onchange="calc()">
 <span>全家店到店（運費100元）</span>
 </label>
-</div>
 
-<div style="margin:15px 0;">
-<label style="display:flex;align-items:center;">
-<input type="radio" name="ship" value="宅配" onchange="calc()" style="width:22px;height:22px;margin-right:12px;">
+<label style="display:flex;align-items:center;margin:12px 0;">
+<input type="radio" name="ship" value="宅配" onchange="calc()">
 <span>宅配（運費300元）</span>
 </label>
-</div>
+
+<h2>💰 付款方式</h2>
+
+<div id="paymentBox"></div>
 
 <h2>👤 顧客資料</h2>
-    
+
 <label>姓名</label>
 <input type="text" id="name" placeholder="請輸入姓名">
 
 <label>電話</label>
 <input type="tel" id="phone" placeholder="請輸入電話">
 
+<div id="addressBox">
+
 <label>地址（自取可不填）</label>
-<textarea id="address" placeholder="店到店或宅配請填寫完整地址"></textarea>
 
+<textarea id="address"
+placeholder="店到店或宅配請填寫完整地址"></textarea>
 
+</div>
 
 <div class="total">
 總金額：
 <span id="total">0</span> 元
 </div>
 
-<button onclick="submitOrder()">
+<button id="submitBtn" onclick="submitOrder()">
 送出訂單
-</button><script>
+</button>
 
-const API="https://script.google.com/macros/s/AKfycbxUwUuaONyqF0PDyzmVRQN_ohD00-GC-IYAOKjeVFVs4HjzxPo2T8vamerw4pYClmGO2A/exec";
+<script>const API = "https://script.google.com/macros/s/AKfycbxUwUuaONyqF0PDyzmVRQN_ohD00-GC-IYAOKjeVFVs4HjzxPo2T8vamerw4pYClmGO2A/exec";
+
+let sending = false;
 
 function v(id){
-  return Number(document.getElementById(id).value);
+    return Number(document.getElementById(id).value);
 }
 
 function calc(){
 
-  let total = 0;
+    let total = 0;
 
-  total += v("cabbage") * 7.5;
-  total += v("chive") * 7.5;
-  total += v("corn") * 7.5;
-  total += v("scallion") * 7.5;
+    total += v("cabbage") * 7.5;
+    total += v("chive") * 7.5;
+    total += v("corn") * 7.5;
+    total += v("scallion") * 7.5;
 
-  total += v("kimchi") * 10;
-  total += v("pepper") * 10;
+    total += v("kimchi") * 10;
+    total += v("pepper") * 10;
 
-  total += v("shrimp") * 15;
-  total += v("kimchiShrimp") * 15;
+    total += v("shrimp") * 15;
+    total += v("kimchiShrimp") * 15;
 
-  const ship =
-    document.querySelector('input[name="ship"]:checked').value;
+    const ship = document.querySelector('input[name="ship"]:checked').value;
 
-  let shipping = 0;
+    let shipping = 0;
 
-  if (total < 3000) {
-    if (ship === "全家店到店") shipping = 100;
-    if (ship === "宅配") shipping = 300;
-  }
+    if(total < 3000){
+        if(ship=="全家店到店") shipping = 100;
+        if(ship=="宅配") shipping = 300;
+    }
 
-  document.getElementById("total").innerText = total + shipping;
+    document.getElementById("total").innerText = total + shipping;
+
+    if(ship=="自取"){
+
+        document.getElementById("addressBox").style.display="none";
+
+        document.getElementById("paymentBox").innerHTML = `
+        <label>
+            <input type="radio" name="pay" value="現金" checked>
+            現金付款
+        </label><br>
+        <label>
+            <input type="radio" name="pay" value="匯款">
+            匯款
+        </label>
+        `;
+
+    }else{
+
+        document.getElementById("addressBox").style.display="block";
+
+        document.getElementById("paymentBox").innerHTML = `
+        <label>
+            <input type="radio" name="pay" value="匯款" checked>
+            匯款
+        </label>
+        `;
+
+    }
 }
+
 function submitOrder(){
 
-  const data = {
-  name: document.getElementById("name").value,
-  phone: document.getElementById("phone").value,
-  address: document.getElementById("address").value,
-  ship: document.querySelector('input[name="ship"]:checked').value,
+    if(sending) return;
+    sending = true;
 
-    cabbage:v("cabbage"),
-    chive:v("chive"),
-    corn:v("corn"),
-    scallion:v("scallion"),
-    kimchi:v("kimchi"),
-    pepper:v("pepper"),
-    shrimp:v("shrimp"),
-    kimchiShrimp:v("kimchiShrimp"),
+    document.getElementById("submitBtn").disabled = true;
+    document.getElementById("submitBtn").innerText = "送出中...";
 
-    total:Number(document.getElementById("total").innerText),
-  };
+    const data = {
 
-  if(data.name==""){
-    alert("請輸入姓名");
-    return;
-  }
+        name:document.getElementById("name").value,
+        phone:document.getElementById("phone").value,
+        address:document.getElementById("address").value,
 
-  if(data.phone==""){
-    alert("請輸入電話");
-    return;
-  }
+        ship:document.querySelector('input[name="ship"]:checked').value,
+        pay:document.querySelector('input[name="pay"]:checked').value,
 
-  fetch(API,{
-    method:"POST",
-    headers:{
-      "Content-Type":"text/plain;charset=utf-8"
-    },
-    body:JSON.stringify(data)
-  })
-  .then(r=>r.json())
-  .then(res=>{
+        cabbage:v("cabbage"),
+        chive:v("chive"),
+        corn:v("corn"),
+        scallion:v("scallion"),
+        kimchi:v("kimchi"),
+        pepper:v("pepper"),
+        shrimp:v("shrimp"),
+        kimchiShrimp:v("kimchiShrimp"),
 
-      if(res.success){
+        total:Number(document.getElementById("total").innerText)
 
-          alert("訂單送出成功！");
+    };
 
-          location.reload();
+    if(data.name==""){
+        alert("請輸入姓名");
+        sending=false;
+        document.getElementById("submitBtn").disabled=false;
+        document.getElementById("submitBtn").innerText="送出訂單";
+        return;
+    }
 
-      }else{
+    if(data.phone==""){
+        alert("請輸入電話");
+        sending=false;
+        document.getElementById("submitBtn").disabled=false;
+        document.getElementById("submitBtn").innerText="送出訂單";
+        return;
+    }
 
-          alert("送出失敗：" + res.error);
+    if(data.ship!="自取" && data.address==""){
+        alert("請輸入地址");
+        sending=false;
+        document.getElementById("submitBtn").disabled=false;
+        document.getElementById("submitBtn").innerText="送出訂單";
+        return;
+    }
 
-      }
+    fetch(API,{
+        method:"POST",
+        headers:{
+            "Content-Type":"text/plain;charset=utf-8"
+        },
+        body:JSON.stringify(data)
+    })
+    .then(r=>r.json())
+    .then(res=>{
 
-  })
-  .catch(err=>{
+        if(res.success){
 
-      alert("連線失敗\n"+err);
+            alert("訂單送出成功！");
+            location.reload();
 
-  });
+        }else{
+
+            sending=false;
+            document.getElementById("submitBtn").disabled=false;
+            document.getElementById("submitBtn").innerText="送出訂單";
+
+            alert("送出失敗：" + res.error);
+
+        }
+
+    })
+    .catch(err=>{
+
+        sending=false;
+        document.getElementById("submitBtn").disabled=false;
+        document.getElementById("submitBtn").innerText="送出訂單";
+
+        alert("連線失敗\n"+err);
+
+    });
 
 }
 
+calc();
 </script>
-
 </body>
 </html>
