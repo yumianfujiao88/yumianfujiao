@@ -282,11 +282,24 @@ line-height:1.8;
 <textarea id="address"
 placeholder="店到店或宅配請填寫完整地址"></textarea>
     
+<div id="last5Box">
+
+<label>匯款後五碼</label>
+
+<input
+type="text"
+id="last5"
+maxlength="5"
+placeholder="請輸入匯款帳號後五碼">
+
+</div>
+
 <label>備註</label>
 
-<textarea id="note"
-placeholder="例如：匯款後五碼、其他需求"></textarea>
-
+<textarea
+id="note"
+placeholder="其他需求（選填）"></textarea>
+    
 </div>
 
 <div class="total">
@@ -334,7 +347,8 @@ function calc(){
 
  if(ship=="自取"){
 
-    document.getElementById("addressBox").style.display="block";
+   
+    document.getElementById("addressBox").style.display="none";
     document.getElementById("paymentBox").innerHTML = `
     <label>
         <input type="radio" name="pay" value="現金" checked onclick="toggleBankInfo()">
@@ -373,9 +387,14 @@ function submitOrder(){
     document.getElementById("submitBtn").disabled = true;
     document.getElementById("submitBtn").innerText = "送出中...";
 
-    const data = {
+const data = {
+
+    note:
+        "後五碼：" +
+        document.getElementById("last5").value +
+        "\n" +
+        document.getElementById("note").value,
         
-        note:document.getElementById("note").value,
         name:document.getElementById("name").value,
         phone:document.getElementById("phone").value,
         address:document.getElementById("address").value,
@@ -412,6 +431,17 @@ function submitOrder(){
         return;
     }
 
+ if(
+    data.pay=="匯款" &&
+    document.getElementById("last5").value.trim()==""
+){
+    alert("請輸入匯款後五碼");
+    sending=false;
+    document.getElementById("submitBtn").disabled=false;
+    document.getElementById("submitBtn").innerText="送出訂單";
+    return;
+}
+    
     if(data.ship!="自取" && data.address==""){
         alert("請輸入地址");
         sending=false;
@@ -464,14 +494,20 @@ toggleBankInfo();
 
 function toggleBankInfo(){
 
-    const pay =  document.querySelector('input[name="pay"]:checked');
+    const pay = document.querySelector('input[name="pay"]:checked');
 
     if(!pay) return;
 
     if(pay.value=="匯款"){
+
         document.getElementById("bankInfo").style.display="block";
+        document.getElementById("last5Box").style.display="block";
+
     }else{
+
         document.getElementById("bankInfo").style.display="none";
+        document.getElementById("last5Box").style.display="none";
+
     }
 
 }
