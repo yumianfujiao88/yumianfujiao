@@ -241,6 +241,32 @@ button:hover{
 
 <div id="paymentBox"></div>
 
+<div id="bankInfo" style="
+display:none;
+background:#FFF8E1;
+border:1px solid #F0D98A;
+padding:15px;
+border-radius:10px;
+margin-top:10px;
+line-height:1.8;
+">
+
+<b>🏦 匯款資訊</b><br>
+
+銀行：中華郵政（700）<br>
+
+帳號：01010032691892<br><br>
+
+<button type="button" onclick="copyBank()">
+📋 一鍵複製帳號
+</button>
+
+<p style="margin-top:10px;color:#d32f2f;">
+※ 匯款完成後，請於備註填寫帳號後五碼。
+</p>
+
+</div>
+
 <h2>👤 顧客資料</h2>
 
 <label>姓名</label>
@@ -255,6 +281,11 @@ button:hover{
 
 <textarea id="address"
 placeholder="店到店或宅配請填寫完整地址"></textarea>
+    
+<label>備註</label>
+
+<textarea id="note"
+placeholder="例如：匯款後五碼、其他需求"></textarea>
 
 </div>
 
@@ -301,37 +332,39 @@ function calc(){
 
     document.getElementById("total").innerText = total + shipping;
 
-    if(ship=="自取"){
+ if(ship=="自取"){
 
-        document.getElementById("addressBox").style.display="none";
+    document.getElementById("addressBox").style.display="block";
+    document.getElementById("paymentBox").innerHTML = `
+    <label>
+        <input type="radio" name="pay" value="現金" checked onclick="toggleBankInfo()">
+        現金付款
+    </label><br>
 
-        document.getElementById("paymentBox").innerHTML = `
-        <label>
-            <input type="radio" name="pay" value="現金" checked>
-            現金付款
-        </label><br>
-        <label>
-            <input type="radio" name="pay" value="匯款">
-            匯款
-        </label>
-        `;
+    <label>
+        <input type="radio" name="pay" value="匯款" onclick="toggleBankInfo()">
+        匯款
+    </label>
+    `;
 
-    }else{
+}else{
 
-        document.getElementById("addressBox").style.display="block";
+    document.getElementById("addressBox").style.display="block";
 
-        document.getElementById("paymentBox").innerHTML = `
-        <label>
-            <input type="radio" name="pay" value="匯款" checked>
-            匯款
-        </label>
-        `;
+    document.getElementById("paymentBox").innerHTML = `
+    <label>
+        <input type="radio" name="pay" value="匯款" checked onclick="toggleBankInfo()">
+        匯款
+    </label>
+    `;
 
-    }
+}
+
+toggleBankInfo();
+
 }
 
 function submitOrder(){
-
     if(sending) return;
     sending = true;
 
@@ -339,7 +372,8 @@ function submitOrder(){
     document.getElementById("submitBtn").innerText = "送出中...";
 
     const data = {
-
+        
+        note:document.getElementById("note").value,
         name:document.getElementById("name").value,
         phone:document.getElementById("phone").value,
         address:document.getElementById("address").value,
@@ -383,7 +417,7 @@ function submitOrder(){
         document.getElementById("submitBtn").innerText="送出訂單";
         return;
     }
-
+        
     fetch(API,{
         method:"POST",
         headers:{
@@ -423,6 +457,34 @@ function submitOrder(){
 }
 
 calc();
+
+toggleBankInfo();
+
+function toggleBankInfo(){
+
+    const pay =  document.querySelector('input[name="pay"]:checked');
+
+    if(!pay) return;
+
+    if(pay.value=="匯款"){
+        document.getElementById("bankInfo").style.display="block";
+    }else{
+        document.getElementById("bankInfo").style.display="none";
+    }
+
+}
+
+  function copyBank(){
+
+    navigator.clipboard.writeText("01010032691892")
+    .then(()=>{
+        alert("已複製匯款帳號");
+    })
+    .catch(()=>{
+        prompt("請手動複製", "01010032691892");
+    });
+
+}
 </script>
 </body>
 </html>
