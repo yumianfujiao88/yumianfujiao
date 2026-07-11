@@ -272,12 +272,12 @@ line-height:1.8;
 <label>是否為新客？</label><br>
 
 <label>
-<input type="radio" name="newCustomer" value="是" onchange="toggleReferral()">
+<input type="radio" name="newCustomer" value="是" onchange="toggleReferral();calc()">
 是
 </label>
 
 <label style="margin-left:20px;">
-<input type="radio" name="newCustomer" value="否" checked onchange="toggleReferral()">
+<input type="radio" name="newCustomer" value="否" checked onchange="toggleReferral();calc()">
 否
 </label>
 
@@ -329,8 +329,9 @@ placeholder="店到店或宅配請填寫完整地址"></textarea>
 type="text"
 id="last5"
 maxlength="5"
+inputmode="numeric"
+pattern="[0-9]{5}"
 placeholder="請輸入匯款帳號後五碼">
-
 </div>
 
 <label>備註</label>
@@ -449,15 +450,9 @@ document.querySelector('input[name="hasReferrer"]:checked')?.value || "",
 referrer:
 document.getElementById("referrer").value,
 
-last5:
-document.getElementById("last5") ?
-document.getElementById("last5").value : "",
+last5: document.getElementById("last5").value,
 
-    note:
-        "後五碼：" +
-        document.getElementById("last5").value +
-        "\n" +
-        document.getElementById("note").value,
+note: document.getElementById("note").value,
         
         name:document.getElementById("name").value,
         phone:document.getElementById("phone").value,
@@ -506,11 +501,12 @@ if(
     document.getElementById("submitBtn").innerText="送出訂單";
     return;
 }
- if(
+    
+if(
     data.pay=="匯款" &&
-    document.getElementById("last5").value.trim()==""
+    !/^\d{5}$/.test(data.last5)
 ){
-    alert("請輸入匯款後五碼");
+    alert("請輸入5位數匯款後五碼");
     sending=false;
     document.getElementById("submitBtn").disabled=false;
     document.getElementById("submitBtn").innerText="送出訂單";
@@ -595,6 +591,7 @@ function toggleReferral(){
     document.getElementById("referralBox").style.display =
         isNew=="是" ? "block":"none";
 
+    calc(); 
 }
 
 function toggleReferrerName(){
