@@ -267,7 +267,46 @@ line-height:1.8;
 
 </div>
 
-<h2>👤 顧客資料</h2>
+<h2>🎉 優惠活動</h2>
+
+<label>是否為新客？</label><br>
+
+<label>
+<input type="radio" name="newCustomer" value="是" onchange="toggleReferral()">
+是
+</label>
+
+<label style="margin-left:20px;">
+<input type="radio" name="newCustomer" value="否" checked onchange="toggleReferral()">
+否
+</label>
+
+<div id="referralBox" style="display:none;margin-top:15px;">
+
+<label>是否有介紹人？</label><br>
+
+<label>
+<input type="radio" name="hasReferrer" value="有" checked onchange="toggleReferrerName()">
+有
+</label>
+
+<label style="margin-left:20px;">
+<input type="radio" name="hasReferrer" value="沒有" onchange="toggleReferrerName()">
+沒有
+</label>
+
+<div id="referrerNameBox" style="margin-top:10px;">
+
+<label>介紹人姓名</label>
+
+    
+<input type="text" id="referrer" placeholder="請輸入介紹人姓名">
+
+</div>
+
+</div>
+    
+    <h2>👤 顧客資料</h2>
 
 <label>姓名</label>
 <input type="text" id="name" placeholder="請輸入姓名">
@@ -343,7 +382,19 @@ function calc(){
         if(ship=="宅配") shipping = 300;
     }
 
-    document.getElementById("total").innerText = total + shipping;
+  let finalTotal = total;
+
+const newCustomer =
+document.querySelector('input[name="newCustomer"]:checked');
+
+if(newCustomer && newCustomer.value=="是"){
+
+finalTotal = Math.round(total * 0.95 * 10) / 10;
+    
+}
+
+document.getElementById("total").innerText =
+finalTotal + shipping;
 
  if(ship=="自取"){
 
@@ -389,6 +440,19 @@ function submitOrder(){
 
 const data = {
 
+newCustomer:
+document.querySelector('input[name="newCustomer"]:checked').value,
+
+hasReferrer:
+document.querySelector('input[name="hasReferrer"]:checked')?.value || "",
+
+referrer:
+document.getElementById("referrer").value,
+
+last5:
+document.getElementById("last5") ?
+document.getElementById("last5").value : "",
+
     note:
         "後五碼：" +
         document.getElementById("last5").value +
@@ -424,13 +488,24 @@ const data = {
     }
 
     if(data.phone==""){
-        alert("請輸入電話");
-        sending=false;
-        document.getElementById("submitBtn").disabled=false;
-        document.getElementById("submitBtn").innerText="送出訂單";
-        return;
-    }
+    alert("請輸入電話");
+    sending=false;
+    document.getElementById("submitBtn").disabled=false;
+    document.getElementById("submitBtn").innerText="送出訂單";
+    return;
+}
 
+if(
+    data.newCustomer=="是" &&
+    data.hasReferrer=="有" &&
+    data.referrer.trim()==""
+){
+    alert("請輸入介紹人姓名");
+    sending=false;
+    document.getElementById("submitBtn").disabled=false;
+    document.getElementById("submitBtn").innerText="送出訂單";
+    return;
+}
  if(
     data.pay=="匯款" &&
     document.getElementById("last5").value.trim()==""
@@ -512,7 +587,27 @@ function toggleBankInfo(){
 
 }
 
-  function copyBank(){
+function toggleReferral(){
+
+    const isNew =
+        document.querySelector('input[name="newCustomer"]:checked').value;
+
+    document.getElementById("referralBox").style.display =
+        isNew=="是" ? "block":"none";
+
+}
+
+function toggleReferrerName(){
+
+    const has =
+        document.querySelector('input[name="hasReferrer"]:checked').value;
+
+    document.getElementById("referrerNameBox").style.display =
+        has=="有" ? "block":"none";
+
+}
+    
+    function copyBank(){
 
     navigator.clipboard.writeText("01010032691892")
     .then(()=>{
