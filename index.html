@@ -385,7 +385,9 @@ setTimeout(toggleBankInfo, 50);
 setTimeout(toggleBankInfo, 50);
 
 }
-
+    
+toggleBankInfo();
+    
 function submitOrder(){
     if(sending) return;
     sending = true;
@@ -422,7 +424,7 @@ note: document.getElementById("note").value,
         kimchi:v("kimchi"),
         pepper:v("pepper"),
         shrimp:v("shrimp"),
-        kimchiShrimp:v("kimchiShrimp"),
+        kimchiShrimp:0,
 
         total:Number(document.getElementById("total").innerText)
 
