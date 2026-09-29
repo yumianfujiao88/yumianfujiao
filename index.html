@@ -332,14 +332,14 @@ function calc(){
     total += v("cabbage") * 7.5;
     total += v("chive") * 7.5;
     total += v("corn") * 7.5;
-    total += v("scallion") * 7.5;
+    total += v("scallion") * 8;
+    total += v("spicy") * 8;
 
     total += v("kimchi") * 10;
     total += v("pepper") * 10;
 
     total += v("shrimp") * 15;
-    total += v("kimchiShrimp") * 15;
-
+   
     const ship = document.querySelector('input[name="ship"]:checked').value;
 
     let shipping = 0;
@@ -350,15 +350,6 @@ function calc(){
     }
 
   let finalTotal = total;
-
-const newCustomer =
-document.querySelector('input[name="newCustomer"]:checked');
-
-if(newCustomer && newCustomer.value=="是"){
-
-finalTotal = Math.round(total * 0.95);
-    
-}
 
 document.getElementById("total").innerText =
 finalTotal + shipping;
